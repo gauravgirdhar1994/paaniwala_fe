@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
+import Alert from '@mui/material/Alert';
 import { LoadingButton } from '@mui/lab';
 // components
 import axios from 'axios';
@@ -15,6 +16,7 @@ export default function LoginForm() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({});
+  const [errMsg, setErrMsg] = useState("");
 
   const handleClick = () => {
 
@@ -35,12 +37,18 @@ export default function LoginForm() {
       })
       .catch((error) => {
         console.log(error);
+        setErrMsg(error.message);
       });
   };
 
   return (
     <>
       <Stack spacing={3}>
+       {errMsg &&  
+        <Alert variant="filled" severity="error" sx={{ width: '100%' }}>
+          {errMsg}
+        </Alert>
+}
         <TextField name="email" label="Email address" onChange={(e) => setFormData(formData => ({...formData, email: e.target.value}))} />
 
         <TextField

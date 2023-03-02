@@ -42,11 +42,10 @@ const StyledContent = styled('div')(({ theme }) => ({
 
 export default function LoginPage() {
   const mdUp = useResponsive('up', 'md');
-
   return (
     <>
       <Helmet>
-        <title> Login | Minimal UI </title>
+        <title> Login | Paaniwala </title>
       </Helmet>
 
       <StyledRoot>
@@ -61,7 +60,7 @@ export default function LoginPage() {
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome Back
+            Hi, Welcome Back
             </Typography>
             <img src="/assets/illustrations/illustration_login.png" alt="login" />
           </StyledSection>

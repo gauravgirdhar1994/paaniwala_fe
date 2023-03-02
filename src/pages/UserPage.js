@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 // components
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
@@ -70,6 +71,8 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function UserPage() {
+  const navigate = useNavigate();
+
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -174,17 +177,15 @@ export default function UserPage() {
 
   if(USERLIST){
   return (
-    <>
-      <Helmet>
-        <title> User </title>
-      </Helmet>
 
-      <Container>
+      <><Helmet>
+      <title> User </title>
+    </Helmet><Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             User
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" onClick={() => navigate('/dashboard/user/add', { replace: true })} startIcon={<Iconify icon="eva:plus-fill" />}>
             New User
           </Button>
         </Stack>
@@ -201,27 +202,26 @@ export default function UserPage() {
                   headLabel={TABLE_HEAD}
                   rowCount={USERLIST.length}
                   numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                />
+                  onRequestSort={handleRequestSort} />
                 <TableBody>
                   {USERLIST.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, firstname, lastname, email, role} = row;
+                    const { id, firstname, lastname, email, role } = row;
                     const selectedUser = selected.indexOf(firstname) !== -1;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
                         {/* <TableCell padding="checkbox">
-                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, firstname)} />
-                        </TableCell> */}
+            <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, firstname)} />
+          </TableCell> */}
 
                         {/* <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell> */}
+            <Stack direction="row" alignItems="center" spacing={2}>
+              <Avatar alt={name} src={avatarUrl} />
+              <Typography variant="subtitle2" noWrap>
+                {name}
+              </Typography>
+            </Stack>
+          </TableCell> */}
 
                         <TableCell align="left">{firstname}</TableCell>
 
@@ -235,35 +235,35 @@ export default function UserPage() {
                     );
                   })}
                   {/* {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )} */}
+<TableRow style={{ height: 53 * emptyRows }}>
+<TableCell colSpan={6} />
+</TableRow>
+)} */}
                 </TableBody>
 
                 {/* {isNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <Paper
-                          sx={{
-                            textAlign: 'center',
-                          }}
-                        >
-                          <Typography variant="h6" paragraph>
-                            Not found
-                          </Typography>
+<TableBody>
+<TableRow>
+<TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+  <Paper
+    sx={{
+      textAlign: 'center',
+    }}
+  >
+    <Typography variant="h6" paragraph>
+      Not found
+    </Typography>
 
-                          <Typography variant="body2">
-                            No results found for &nbsp;
-                            <strong>&quot;{filterName}&quot;</strong>.
-                            <br /> Try checking for typos or using complete words.
-                          </Typography>
-                        </Paper>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                )} */}
+    <Typography variant="body2">
+      No results found for &nbsp;
+      <strong>&quot;{filterName}&quot;</strong>.
+      <br /> Try checking for typos or using complete words.
+    </Typography>
+  </Paper>
+</TableCell>
+</TableRow>
+</TableBody>
+)} */}
               </Table>
             </TableContainer>
           </Scrollbar>
@@ -275,40 +275,37 @@ export default function UserPage() {
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+            onRowsPerPageChange={handleChangeRowsPerPage} />
         </Card>
-      </Container>
-
-      <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            '& .MuiMenuItem-root': {
-              px: 1,
-              typography: 'body2',
-              borderRadius: 0.75,
+        <Container />
+        <Popover
+          open={Boolean(open)}
+          anchorEl={open}
+          onClose={handleCloseMenu}
+          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          PaperProps={{
+            sx: {
+              p: 1,
+              width: 140,
+              '& .MuiMenuItem-root': {
+                px: 1,
+                typography: 'body2',
+                borderRadius: 0.75,
+              },
             },
-          },
-        }}
-      >
-        <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
-        </MenuItem>
+          }}
+        >
+          <MenuItem>
+            <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+            Edit
+          </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
-      </Popover>
-    </>
+          <MenuItem sx={{ color: 'error.main' }}>
+            <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
+            Delete
+          </MenuItem>
+        </Popover></Container></>
   );
       }
 
