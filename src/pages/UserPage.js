@@ -36,6 +36,8 @@ const TABLE_HEAD = [
   { id: 'lastname', label: 'Last Name', alignRight: false },
   { id: 'email', label: 'Email', alignRight: false },
   { id: 'role', label: 'Role', alignRight: false },
+  { id: 'phone', label: 'Phone Number', alignRight: false },
+  { id: 'address', label: 'Address', alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -85,7 +87,7 @@ export default function UserPage() {
 
   const [filterName, setFilterName] = useState('');
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
 
   const [USERLIST, setUserList] = useState([]);
 
@@ -145,18 +147,18 @@ export default function UserPage() {
     const config = {
       method: 'get',
       url: 'https://paaniwala-be.onrender.com/api/user/all',
-      headers: { }
+      headers: {},
     };
-    
+
     axios(config)
-    .then((response) => {
-      console.log(JSON.stringify(response.data));
-      setUserList(response.data.data.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+        setUserList(response.data.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   // const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
@@ -166,148 +168,118 @@ export default function UserPage() {
 
   useEffect(() => {
     getUserList();
-  }, [])
+  }, []);
 
   useEffect(() => {
     console.log('update user list');
     filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
-  }, [USERLIST])
+  }, [USERLIST]);
 
   console.log('user list', filteredUsers);
 
-  if(USERLIST){
-  return (
+  if (USERLIST) {
+    return (
+      <>
+        <Helmet>
+          <title> User </title>
+        </Helmet>
+        <Container>
+          <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+            <Typography variant="h4" gutterBottom>
+              User
+            </Typography>
+            <Button
+              variant="contained"
+              onClick={() => navigate('/dashboard/user/add', { replace: true })}
+              startIcon={<Iconify icon="eva:plus-fill" />}
+            >
+              New User
+            </Button>
+          </Stack>
 
-      <><Helmet>
-      <title> User </title>
-    </Helmet><Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
-            User
-          </Typography>
-          <Button variant="contained" onClick={() => navigate('/dashboard/user/add', { replace: true })} startIcon={<Iconify icon="eva:plus-fill" />}>
-            New User
-          </Button>
-        </Stack>
+          <Card>
+            {/* <UserListToolbar /> */}
 
-        <Card>
-          {/* <UserListToolbar /> */}
+            <Scrollbar>
+              <TableContainer sx={{ minWidth: 800 }}>
+                <Table>
+                  <UserListHead
+                    order={order}
+                    orderBy={orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={USERLIST.length}
+                    numSelected={selected.length}
+                    onRequestSort={handleRequestSort}
+                  />
+                  <TableBody>
+                    {USERLIST.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                      const { id, firstname, lastname, email, role, phone, address } = row;
+                      const selectedUser = selected.indexOf(firstname) !== -1;
 
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
-                <UserListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort} />
-                <TableBody>
-                  {USERLIST.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, firstname, lastname, email, role } = row;
-                    const selectedUser = selected.indexOf(firstname) !== -1;
+                      return (
+                        <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
+                          <TableCell align="left">{firstname}</TableCell>
 
-                    return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
-                        {/* <TableCell padding="checkbox">
-            <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, firstname)} />
-          </TableCell> */}
+                          <TableCell align="left">{lastname}</TableCell>
 
-                        {/* <TableCell component="th" scope="row" padding="none">
-            <Stack direction="row" alignItems="center" spacing={2}>
-              <Avatar alt={name} src={avatarUrl} />
-              <Typography variant="subtitle2" noWrap>
-                {name}
-              </Typography>
-            </Stack>
-          </TableCell> */}
+                          <TableCell align="left">{email}</TableCell>
 
-                        <TableCell align="left">{firstname}</TableCell>
+                          <TableCell align="left">{role}</TableCell>
 
-                        <TableCell align="left">{lastname}</TableCell>
+                          <TableCell align="left">{phone}</TableCell>
 
-                        <TableCell align="left">{email}</TableCell>
+                          <TableCell align="left">{address}</TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
 
-                        <TableCell align="left">{role}</TableCell>
-
-                      </TableRow>
-                    );
-                  })}
-                  {/* {emptyRows > 0 && (
-<TableRow style={{ height: 53 * emptyRows }}>
-<TableCell colSpan={6} />
-</TableRow>
-)} */}
-                </TableBody>
-
-                {/* {isNotFound && (
-<TableBody>
-<TableRow>
-<TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-  <Paper
-    sx={{
-      textAlign: 'center',
-    }}
-  >
-    <Typography variant="h6" paragraph>
-      Not found
-    </Typography>
-
-    <Typography variant="body2">
-      No results found for &nbsp;
-      <strong>&quot;{filterName}&quot;</strong>.
-      <br /> Try checking for typos or using complete words.
-    </Typography>
-  </Paper>
-</TableCell>
-</TableRow>
-</TableBody>
-)} */}
-              </Table>
-            </TableContainer>
-          </Scrollbar>
-
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={USERLIST.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage} />
-        </Card>
-        <Container />
-        <Popover
-          open={Boolean(open)}
-          anchorEl={open}
-          onClose={handleCloseMenu}
-          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-          PaperProps={{
-            sx: {
-              p: 1,
-              width: 140,
-              '& .MuiMenuItem-root': {
-                px: 1,
-                typography: 'body2',
-                borderRadius: 0.75,
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={USERLIST.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Card>
+          <Container />
+          <Popover
+            open={Boolean(open)}
+            anchorEl={open}
+            onClose={handleCloseMenu}
+            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            PaperProps={{
+              sx: {
+                p: 1,
+                width: 140,
+                '& .MuiMenuItem-root': {
+                  px: 1,
+                  typography: 'body2',
+                  borderRadius: 0.75,
+                },
               },
-            },
-          }}
-        >
-          <MenuItem>
-            <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-            Edit
-          </MenuItem>
+            }}
+          >
+            <MenuItem>
+              <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+              Edit
+            </MenuItem>
 
-          <MenuItem sx={{ color: 'error.main' }}>
-            <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-            Delete
-          </MenuItem>
-        </Popover></Container></>
-  );
-      }
+            <MenuItem sx={{ color: 'error.main' }}>
+              <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
+              Delete
+            </MenuItem>
+          </Popover>
+        </Container>
+      </>
+    );
+  }
 
-  return <div/>
+  return <div />;
 }

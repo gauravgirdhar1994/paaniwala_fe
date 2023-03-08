@@ -2,21 +2,31 @@ import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { useState, useEffect } from 'react';
 // @mui
-import { Card, Stack, Container, IconButton, InputAdornment, TextField, FormControl, FormLabel, RadioGroup, Radio, FormControlLabel } from '@mui/material';
+import {
+  Card,
+  Stack,
+  Container,
+  IconButton,
+  InputAdornment,
+  TextField,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  FormControlLabel,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
 import axios from 'axios';
 import Iconify from '../components/iconify/Iconify';
 
-
 export default function AddUserPage() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({});
 
   const handleClick = () => {
-
     const config = {
       method: 'post',
       url: 'https://paaniwala-be.onrender.com/api/auth/signup',
@@ -42,9 +52,23 @@ export default function AddUserPage() {
       </Helmet>
 
       <Container>
-        <Card style={{padding: 30}}>
-          <Stack direction="column"
-  spacing={5}>
+        <Card style={{ padding: 30 }}>
+          <Stack direction="column" spacing={5}>
+            <FormControl>
+              <FormLabel id="demo-radio-buttons-group-label">Role</FormLabel>
+              <RadioGroup
+                aria-labelledby="demo-radio-buttons-group-label"
+                defaultValue="admin"
+                name="radio-buttons-group"
+                row
+                onChange={(e) => setFormData((formData) => ({ ...formData, role: e.target.value }))}
+              >
+                <FormControlLabel value="admin" control={<Radio />} label="Admin" />
+                <FormControlLabel value="customer" control={<Radio />} label="Customer" />
+                <FormControlLabel value="DM" control={<Radio />} label="Delivery Manager" />
+              </RadioGroup>
+            </FormControl>
+
             <TextField
               name="firstname"
               label="First Name"
@@ -63,6 +87,28 @@ export default function AddUserPage() {
               onChange={(e) => setFormData((formData) => ({ ...formData, email: e.target.value }))}
             />
 
+            {formData.role === 'customer' || formData.role === 'DM' ? (
+              <TextField
+                name="phone"
+                label="Phone Number"
+                onChange={(e) => setFormData((formData) => ({ ...formData, phone: e.target.value }))}
+              />
+            ) : (
+              ''
+            )}
+
+            {formData.role === 'customer' ? (
+              <TextField
+                name="address"
+                multiline
+                rows="4"
+                label="Address"
+                onChange={(e) => setFormData((formData) => ({ ...formData, address: e.target.value }))}
+              />
+            ) : (
+              ''
+            )}
+
             <TextField
               name="password"
               label="Password"
@@ -78,21 +124,6 @@ export default function AddUserPage() {
                 ),
               }}
             />
-
-            <FormControl>
-              <FormLabel id="demo-radio-buttons-group-label">Role</FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="admin"
-                name="radio-buttons-group"
-                row
-                onChange={(e) => setFormData((formData) => ({ ...formData, role: e.target.value }))}
-              >
-                <FormControlLabel value="admin" control={<Radio />} label="Admin" />
-                <FormControlLabel value="customer" control={<Radio />} label="Customer" />
-                <FormControlLabel value="DM" control={<Radio />} label="Delivery Manager" />
-              </RadioGroup>
-            </FormControl>
           </Stack>
 
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }} />

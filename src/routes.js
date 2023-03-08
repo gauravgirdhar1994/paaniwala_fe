@@ -12,6 +12,7 @@ import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import AddUserPage from './pages/AddUserPage';
 import Protected from './pages/Protected';
+import AddProductPage from './pages/AddProductPage';
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +28,8 @@ export default function Router() {
         { path: 'app', element: <Protected isLoggedIn={isLoggedIn}><DashboardAppPage /></Protected> },
         { path: 'user', element: <Protected isLoggedIn={isLoggedIn}><UserPage /></Protected> },
         { path: 'user/add', element: <Protected isLoggedIn={isLoggedIn}><AddUserPage /></Protected> },
-        // { path: 'products', element: <ProductsPage /> },
+        { path: 'products', element: <Protected isLoggedIn={isLoggedIn}><ProductsPage /></Protected> },
+        { path: 'products/add', element: <Protected isLoggedIn={isLoggedIn}><AddProductPage /></Protected> },
         // { path: 'blog', element: <BlogPage /> },
       ],
     },
