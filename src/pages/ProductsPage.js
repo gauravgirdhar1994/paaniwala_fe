@@ -221,7 +221,7 @@ export default function ProductsPage() {
                           <TableCell align="left">{productDescription}</TableCell>
 
 
-                          <TableCell align="left"><img alt={productTitle} src={`https://paaniwala-be.onrender.com/${productImage}`}/></TableCell>
+                          <TableCell align="left"><img alt={productTitle} src={`https://paaniwala-be.onrender.com/img/${productImage}`}/></TableCell>
 
                           <TableCell align="left">{color}</TableCell>
 
