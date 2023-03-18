@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // @mui
 import {
   Card,
@@ -14,6 +14,7 @@ import {
   RadioGroup,
   Radio,
   FormControlLabel,
+  Button,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
@@ -24,14 +25,18 @@ export default function AddProductPage() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [file, setFile] = useState('');
+  const [formData, setFormData] = useState(new FormData());
+
+  const uploadInputRef = useRef(null);
 
   const handleClick = () => {
+
     const config = {
       method: 'post',
       url: 'https://paaniwala-be.onrender.com/api/product/create',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
       },
       data: formData,
     };
@@ -45,6 +50,12 @@ export default function AddProductPage() {
         console.log(error);
       });
   };
+
+  const uploadFile = () => {
+    const formData = new FormData();
+    formData.append('file', file); // appending file
+  };
+
   return (
     <>
       <Helmet>
@@ -54,7 +65,6 @@ export default function AddProductPage() {
       <Container>
         <Card style={{ padding: 30 }}>
           <Stack direction="column" spacing={5}>
-
             <TextField
               name="productTitle"
               label="Product Title"
@@ -75,19 +85,33 @@ export default function AddProductPage() {
               onChange={(e) => setFormData((formData) => ({ ...formData, color: e.target.value }))}
             />
 
-            
-              <TextField
-                name="size"
-                label="Size"
-                onChange={(e) => setFormData((formData) => ({ ...formData, size: e.target.value }))}
-              />
+            <TextField
+              name="size"
+              label="Size"
+              onChange={(e) => setFormData((formData) => ({ ...formData, size: e.target.value }))}
+            />
 
-              <TextField
-                name="quantity"
-                label="Quantity"
-                onChange={(e) => setFormData((formData) => ({ ...formData, quantity: e.target.value }))}
-              />
+            <TextField
+              name="quantity"
+              label="Quantity"
+              onChange={(e) => setFormData((formData) => ({ ...formData, quantity: e.target.value }))}
+            />
 
+            <Button
+              variant="contained"
+              onClick={() => uploadInputRef.current && uploadInputRef.current.click()}
+              component="label"
+            >
+              Upload Product Image
+              <input
+                type="file"
+                hidden
+                ref={uploadInputRef}
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={(e) => setFormData((formData) => ({ ...formData, file: e.target.files[0] }))}
+              />
+            </Button>
           </Stack>
 
           <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }} />

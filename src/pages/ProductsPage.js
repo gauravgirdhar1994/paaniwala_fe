@@ -34,6 +34,7 @@ import { ProductListHead } from '../sections/@dashboard/products';
 const TABLE_HEAD = [
   { id: 'productTitle', label: 'Product Title', alignRight: false },
   { id: 'productDescription', label: 'Product Description', alignRight: false },
+  { id: 'productImage', label: 'Product Image', alignRight: false },
   { id: 'size', label: 'Size', alignRight: false },
   { id: 'color', label: 'Color', alignRight: false },
   { id: 'quantity', label: 'Quantity', alignRight: false },
@@ -210,7 +211,7 @@ export default function ProductsPage() {
                   />
                   <TableBody>
                     {PRODUCTLIST.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                      const { id, productTitle, productDescription, color, size, quantity } = row;
+                      const { id, productTitle, productDescription, color, size, quantity, productImage } = row;
                       const selectedUser = selected.indexOf(productTitle) !== -1;
 
                       return (
@@ -218,6 +219,9 @@ export default function ProductsPage() {
                           <TableCell align="left">{productTitle}</TableCell>
 
                           <TableCell align="left">{productDescription}</TableCell>
+
+
+                          <TableCell align="left"><img alt={productTitle} src={`https://paaniwala-be.onrender.com/${productImage}`}/></TableCell>
 
                           <TableCell align="left">{color}</TableCell>
 

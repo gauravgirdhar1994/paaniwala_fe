@@ -18,6 +18,8 @@ export default function LoginForm() {
   const [formData, setFormData] = useState({});
   const [errMsg, setErrMsg] = useState("");
 
+  formData.userRole = 'admin';
+
   const handleClick = () => {
 
     const config = {
