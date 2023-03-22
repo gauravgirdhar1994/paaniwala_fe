@@ -93,8 +93,6 @@ export default function LoginForm() {
       });
   };
 
-  console.log('form data', otpResponse?._links && otpResponse?._links[1]?.href);
-
   return (
     <>
       <Stack spacing={3}>
@@ -116,7 +114,7 @@ export default function LoginForm() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }} />
 
       <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={(formData.verificationOtp === undefined || formData?.verificationOtp?.length < 3) ? handleClick : verifyOtp}>
-        Login
+        {(formData.verificationOtp === undefined || formData?.verificationOtp?.length < 3) ? 'Send OTP' : 'Login'}
       </LoadingButton>
     </>
   );

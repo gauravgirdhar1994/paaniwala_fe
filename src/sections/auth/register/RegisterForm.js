@@ -113,7 +113,7 @@ export default function RegisterForm() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }} />
 
       <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={(formData.verificationOtp === undefined || formData?.verificationOtp?.length < 3) ? handleClick : verifyOtp}>
-        Sign Up
+      {(formData.verificationOtp === undefined || formData?.verificationOtp?.length < 3) ? 'Send OTP' : 'Sign Up'}
       </LoadingButton>
     </>
   );
