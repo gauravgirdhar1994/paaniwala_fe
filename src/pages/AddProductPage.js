@@ -79,11 +79,11 @@ export default function AddProductPage() {
               onChange={(e) => setFormData((formData) => ({ ...formData, productDescription: e.target.value }))}
             />
 
-            <TextField
+            {/* <TextField
               name="color"
               label="Color"
               onChange={(e) => setFormData((formData) => ({ ...formData, color: e.target.value }))}
-            />
+            /> */}
 
             <TextField
               name="size"

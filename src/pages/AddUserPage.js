@@ -98,13 +98,15 @@ export default function AddUserPage() {
             )}
 
             {formData.role === 'customer' ? (
-              <TextField
+              <><TextField
                 name="address"
                 multiline
                 rows="4"
                 label="Address"
-                onChange={(e) => setFormData((formData) => ({ ...formData, address: e.target.value }))}
-              />
+                onChange={(e) => setFormData((formData) => ({ ...formData, address: e.target.value }))} /><TextField
+                  name="zipcode"
+                  label="Zip Code"
+                  onChange={(e) => setFormData((formData) => ({ ...formData, zipCode: e.target.value }))} /></>
             ) : (
               ''
             )}
